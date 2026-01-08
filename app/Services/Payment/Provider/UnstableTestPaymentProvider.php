@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Payment;
+namespace App\Services\Payment\Provider;
 
 use App\Contracts\PaymentProviderInterface;
 use App\DTO\Payment\ExternalPaymentResponseDTO;
@@ -36,7 +36,7 @@ final class UnstableTestPaymentProvider implements PaymentProviderInterface
         return new PaymentSimulationDTO(self::FIXED_FEE_IN_CENTS);
     }
 
-    public function createPayment(PaymentDTO $payment): ?ExternalPaymentResponseDTO
+    public function process(PaymentDTO $payment): ?ExternalPaymentResponseDTO
     {
         $response = $this->createMockedResponse();
 
@@ -49,8 +49,12 @@ final class UnstableTestPaymentProvider implements PaymentProviderInterface
         ['pixCode' => $pixCode, 'id' => $providerExternalPaymentId] = $responseBody['data'];
 
         return new ExternalPaymentResponseDTO(
-            $providerExternalPaymentId,
-            new PixPaymentInstructionsDTO(pixCode: $pixCode),
+            provider: $this->getId(),
+            providerId: $providerExternalPaymentId,
+            feeInCents: self::FIXED_FEE_IN_CENTS,
+            paymentMethodInstructions: new PixPaymentInstructionsDTO(
+                pixCode: $pixCode,
+            ),
         );
     }
 

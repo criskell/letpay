@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Payment;
+namespace App\Services\Payment\Provider;
 
 use App\Contracts\PaymentProviderInterface;
 use App\DTO\Payment\ExternalPaymentResponseDTO;
@@ -29,14 +29,16 @@ final class TestPaymentProvider implements PaymentProviderInterface
         return new PaymentSimulationDTO(self::FIXED_FEE_IN_CENTS);
     }
 
-    public function createPayment(PaymentDTO $payment): ?ExternalPaymentResponseDTO
+    public function process(PaymentDTO $payment): ?ExternalPaymentResponseDTO
     {
         $pixCode = '000201010212261060014br.gov.bcb.pix2584https://api.woovi.com/openpix/testing?transactionID=' . Str::random(48) . '.015802BR5909LOCALHOST6009Sao Paulo62360532867ba5173c734202ac659721306b38c963044BCA';
         $qrCodeImageUrl = 'https://test-payment-provider.criskell.com/qrcodes/' . $payment->idempotencyKey;
 
         return new ExternalPaymentResponseDTO(
-            Str::orderedUuid(),
-            new PixPaymentInstructionsDTO(
+            provider: $this->getId(),
+            providerId: Str::orderedUuid(),
+            feeInCents: self::FIXED_FEE_IN_CENTS,
+            paymentMethodInstructions: new PixPaymentInstructionsDTO(
                 pixCode: $pixCode,
                 qrCodeImageUrl: $qrCodeImageUrl,
             ),

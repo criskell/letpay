@@ -12,8 +12,7 @@ final class PaymentServiceProvider extends ServiceProvider
     {
         $this->app->singleton(PaymentRouter::class, function (Application $app) {
             $providers = collect(config('payments.providers'))
-                ->map(fn($className) => $app->make($className))
-                ->toArray();
+                ->map(fn($className) => $app->make($className));
 
             return new PaymentRouter($providers);
         });

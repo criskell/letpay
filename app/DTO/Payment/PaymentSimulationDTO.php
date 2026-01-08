@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\DTO\Payment;
 
-readonly class PaymentSimulationDTO
+final readonly class PaymentSimulationDTO
 {
     public function __construct(public int $feeInCents) {}
 }

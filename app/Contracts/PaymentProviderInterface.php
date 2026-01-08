@@ -17,6 +17,11 @@ interface PaymentProviderInterface
     public function getId(): string;
 
     /**
+     * Get supported payment methods.
+     */
+    public function getPaymentMethods(): array;
+
+    /**
      * Simulate a payment, obtaining the fee for example.
      */
     public function simulatePayment(PaymentDTO $payment): PaymentSimulationDTO;
@@ -24,7 +29,7 @@ interface PaymentProviderInterface
     /**
      * Register a Payment with the provider.
      */
-    public function createPayment(PaymentDTO $payment): ?ExternalPaymentResponseDTO;
+    public function process(PaymentDTO $payment): ?ExternalPaymentResponseDTO;
 
     /**
      * Receives a raw webhook from the payment provider.

@@ -10,8 +10,6 @@ class Payment extends Model
         'status',
         'idempotency_key',
         'grow_amount_in_cents',
-        'net_amount_in_cents',
-        'provider_external_id',
-        'provider',
+        'method',
     ];
 }

@@ -1,16 +1,34 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\DTO\Payment;
 
-readonly class PaymentDTO
+use JsonSerializable;
+
+final readonly class PaymentDTO implements JsonSerializable
 {
-    public function __construct(public string $idempotencyKey, public int $amountInCents) {}
+    public function __construct(
+        public string $method,
+        public int $amountInCents,
+        public ?string $idempotencyKey,
+    ) {}
 
     public static function fromPayload(array $payload)
     {
         return new self(
+            $payload['method'],
+            $payload['amount'],
             $payload['idempotencyKey'],
-            $payload['amount']
         );
+    }
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'method' => $this->method,
+            'amount' => $this->amountInCents,
+            'idempotencyKey' => $this->idempotencyKey,
+        ];
     }
 }

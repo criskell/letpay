@@ -1,8 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\DTO\Payment;
 
-readonly class PixPaymentInstructionsDTO
+use JsonSerializable;
+
+final readonly class PixPaymentInstructionsDTO implements JsonSerializable
 {
     public function __construct(
         // BR Code.
@@ -11,4 +15,12 @@ readonly class PixPaymentInstructionsDTO
         // Not all providers return an image for the QR Code.
         public ?string $qrCodeImageUrl = null,
     ) {}
+
+    public function jsonSerialize(): array
+    {
+        return [
+            'pixCode' => $this->pixCode,
+            'qrCodeImageUrl' => $this->qrCodeImageUrl,
+        ];
+    }
 }

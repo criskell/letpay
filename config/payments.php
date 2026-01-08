@@ -1,7 +1,7 @@
 <?php
 
-use App\Services\Payment\TestPaymentProvider;
-use App\Services\Payment\UnstableTestPaymentProvider;
+use App\Services\Payment\Provider\TestPaymentProvider;
+use App\Services\Payment\Provider\UnstableTestPaymentProvider;
 
 return [
     'providers' => [
